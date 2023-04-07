@@ -293,11 +293,7 @@ public class CommandInit {
                 } else
                     playerStatsManager.setSkillLevel(Skill.valueOf(skill.toUpperCase()), playerSkillLevel);
 
-                if (skill.equals("health")) {
-                    serverPlayerEntity.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH)
-                            .setBaseValue(ConfigInit.CONFIG.healthBase + (double) playerSkillLevel * ConfigInit.CONFIG.healthBonus);
-                    serverPlayerEntity.setHealth(serverPlayerEntity.getMaxHealth());
-                } else if (skill.equals("strength")) {
+                if (skill.equals("strength")) {
                     serverPlayerEntity.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE)
                             .setBaseValue(ConfigInit.CONFIG.attackBase + (double) playerSkillLevel * ConfigInit.CONFIG.attackBonus);
                 } else if (skill.equals("agility")) {

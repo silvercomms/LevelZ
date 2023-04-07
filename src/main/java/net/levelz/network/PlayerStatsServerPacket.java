@@ -50,11 +50,6 @@ public class PlayerStatsServerPacket {
                 playerStatsManager.setSkillLevel(skill, playerStatsManager.getSkillLevel(skill) + level);
                 playerStatsManager.setSkillPoints(playerStatsManager.getSkillPoints() - level);
                 switch (skill) {
-                case HEALTH -> {
-                    player.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH)
-                            .setBaseValue(player.getAttributeBaseValue(EntityAttributes.GENERIC_MAX_HEALTH) + ConfigInit.CONFIG.healthBonus * level);
-                    player.setHealth(player.getHealth() + (float) ConfigInit.CONFIG.healthBonus * level);
-                }
                 case STRENGTH -> player.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE)
                         .setBaseValue(player.getAttributeBaseValue(EntityAttributes.GENERIC_ATTACK_DAMAGE) + ConfigInit.CONFIG.attackBonus * level);
                 case AGILITY -> player.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED)
@@ -240,10 +235,6 @@ public class PlayerStatsServerPacket {
         PlayerStatsManager playerStatsManager = ((PlayerStatsManagerAccess) serverPlayerEntity).getPlayerStatsManager();
         int skillLevel = playerStatsManager.getSkillLevel(skill);
         switch (skill) {
-        case HEALTH -> {
-            serverPlayerEntity.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue(ConfigInit.CONFIG.healthBase + skillLevel * ConfigInit.CONFIG.healthBonus);
-            serverPlayerEntity.setHealth(serverPlayerEntity.getMaxHealth());
-        }
         case STRENGTH -> serverPlayerEntity.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE).setBaseValue(ConfigInit.CONFIG.attackBase + skillLevel * ConfigInit.CONFIG.attackBonus);
         case AGILITY -> serverPlayerEntity.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).setBaseValue(ConfigInit.CONFIG.movementBase + skillLevel * ConfigInit.CONFIG.movementBonus);
         case DEFENSE -> serverPlayerEntity.getAttributeInstance(EntityAttributes.GENERIC_ARMOR).setBaseValue(ConfigInit.CONFIG.defenseBase + skillLevel * ConfigInit.CONFIG.defenseBonus);
