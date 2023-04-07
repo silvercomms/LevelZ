@@ -110,7 +110,6 @@
     "player.ClientPlayerEntityMixin",
     "player.InGameHudMixin",
     "player.InventoryScreenMixin",
-    "player.PlayerListHudMixin",
     "player.PlayerListEntryMixin",
     "player.PlayerEntityRendererMixin",
     "player.AbstractClientPlayerEntityMixin",

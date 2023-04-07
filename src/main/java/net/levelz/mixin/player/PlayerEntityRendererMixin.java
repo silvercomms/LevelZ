@@ -1,5 +1,8 @@
 package net.levelz.mixin.player;
 
+import net.minecraft.client.render.entity.EntityRendererFactory;
+import net.minecraft.client.render.entity.LivingEntityRenderer;
+import net.minecraft.client.render.entity.model.PlayerEntityModel;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -18,25 +21,22 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.text.Text;
 
+import java.util.Objects;
+
 @Environment(EnvType.CLIENT)
 @Mixin(PlayerEntityRenderer.class)
-public class PlayerEntityRendererMixin {
+public abstract class PlayerEntityRendererMixin extends LivingEntityRenderer<AbstractClientPlayerEntity, PlayerEntityModel<AbstractClientPlayerEntity>> {
 
-    @Unique
-    private AbstractClientPlayerEntity abstractClientPlayerEntity;
-
-    @Inject(method = "renderLabelIfPresent", at = @At(value = "HEAD"))
-    protected void renderLabelIfPresentMixin(AbstractClientPlayerEntity abstractClientPlayerEntity, Text text, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i,
-            CallbackInfo info) {
-        this.abstractClientPlayerEntity = abstractClientPlayerEntity;
+    public PlayerEntityRendererMixin(EntityRendererFactory.Context ctx, PlayerEntityModel<AbstractClientPlayerEntity> model, float shadowRadius) {
+        super(ctx, model, shadowRadius);
     }
 
-    @ModifyArg(method = "renderLabelIfPresent", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/entity/LivingEntityRenderer;renderLabelIfPresent(Lnet/minecraft/entity/Entity;Lnet/minecraft/text/Text;Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V", ordinal = 1))
-    protected Text renderLabelIfPresentMixin(Text original) {
-        if (ConfigInit.CONFIG.showLevel)
-            return Team.decorateName(abstractClientPlayerEntity.getScoreboardTeam(),
-                    Text.translatable("text.levelz.scoreboard", ((PlayerListAccess) abstractClientPlayerEntity).getLevel(), abstractClientPlayerEntity.getName()));
-        else
-            return original;
+    @Inject(method = "renderLabelIfPresent(Lnet/minecraft/client/network/AbstractClientPlayerEntity;Lnet/minecraft/text/Text;Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/AbstractClientPlayerEntity;getScoreboard()Lnet/minecraft/scoreboard/Scoreboard;"))
+    protected void renderLabelIfPresentMixin(AbstractClientPlayerEntity abstractClientPlayerEntity, Text text, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i,
+            CallbackInfo info) {
+        if (!abstractClientPlayerEntity.isCreative()) {
+            super.renderLabelIfPresent(abstractClientPlayerEntity, Text.translatable("text.levelz.level", ((PlayerListAccess) abstractClientPlayerEntity).getLevel()), matrixStack, vertexConsumerProvider, i);
+            matrixStack.translate(0.0, 9.0F * 1.15F * 0.025F, 0.0);
+        }
     }
 }
