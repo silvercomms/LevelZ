@@ -106,6 +106,9 @@ public class PlayerStatsManager {
     }
 
     public int getSkillLevel(Skill skill) {
+        if (skill == Skill.HEALTH) {
+            return 20;
+        }
         if (skillLevel.containsKey(skill)) {
             return skillLevel.get(skill);
         }
