@@ -2,6 +2,8 @@ package net.levelz.mixin.block;
 
 import java.util.ArrayList;
 
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -34,8 +36,10 @@ public class AbstractBlockStateMixin {
         ArrayList<Object> levelList = LevelLists.customItemList;
 
         if (!levelList.isEmpty() && levelList.contains(Registry.ITEM.getId(item).toString())) {
-            if (!PlayerStatsManager.playerLevelisHighEnough(player, levelList, Registry.ITEM.getId(item).toString(), true))
+            if (!PlayerStatsManager.playerLevelisHighEnough(player, levelList, Registry.ITEM.getId(item).toString(), true)) {
+                player.sendMessage(Text.literal("You need a higher skill level to do this!").formatted(Formatting.RED), false);
                 ((PlayerBreakBlockAccess) player.getInventory()).setInventoryBlockBreakable(false);
+            }
         } else if (item instanceof MiningToolItem) {
             if (item instanceof HoeItem) {
                 levelList = LevelLists.hoeList;
@@ -45,6 +49,7 @@ public class AbstractBlockStateMixin {
                 levelList = LevelLists.toolList;
             }
             if (!PlayerStatsManager.playerLevelisHighEnough(player, levelList, ((MiningToolItem) item).getMaterial().toString().toLowerCase(), true)) {
+                player.sendMessage(Text.literal("You need a higher skill level to do this!").formatted(Formatting.RED), false);
                 ((PlayerBreakBlockAccess) player.getInventory()).setInventoryBlockBreakable(false);
             } else
                 ((PlayerBreakBlockAccess) player.getInventory()).setInventoryBlockBreakable(true);

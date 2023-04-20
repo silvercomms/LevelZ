@@ -2,6 +2,8 @@ package net.levelz.mixin.misc;
 
 import java.util.List;
 
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -36,6 +38,7 @@ public abstract class SmithingScreenHandlerMixin extends ForgingScreenHandler {
         if (PlayerStatsManager.listContainsItemOrBlock(player, Registry.ITEM.getRawId(list.get(0).getOutput().getItem()), 3) && !player.isCreative()) {
             this.currentRecipe = null;
             this.output.setStack(0, ItemStack.EMPTY);
+            player.sendMessage(Text.literal("You need a higher skill level to do this!").formatted(Formatting.RED), false);
             info.cancel();
         }
     }

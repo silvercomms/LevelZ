@@ -1,5 +1,7 @@
 package net.levelz.mixin.player;
 
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -28,6 +30,7 @@ public class CraftingScreenHandlerMixin {
             resultInventory.setStack(0, ItemStack.EMPTY);
             handler.setPreviousTrackedSlot(0, ItemStack.EMPTY);
             serverPlayerEntity.networkHandler.sendPacket(new ScreenHandlerSlotUpdateS2CPacket(handler.syncId, handler.nextRevision(), 0, ItemStack.EMPTY));
+            serverPlayerEntity.sendMessage(Text.literal("You need a higher skill level to do this!").formatted(Formatting.RED), false);
             info.cancel();
         }
     }

@@ -3,6 +3,8 @@ package net.levelz.mixin.block;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -55,15 +57,18 @@ public class BlockMixin {
                 // Redstone bits block breaker compat
             } else
 
-            if (PlayerStatsManager.listContainsItemOrBlock((PlayerEntity) entity, Registry.BLOCK.getRawId(state.getBlock()), 1))
+            if (PlayerStatsManager.listContainsItemOrBlock((PlayerEntity) entity, Registry.BLOCK.getRawId(state.getBlock()), 1)) {
+                ((PlayerEntity)entity).sendMessage(Text.literal("You need a higher skill level to do this!").formatted(Formatting.RED), false);
                 info.cancel();
-            else if (stack.getItem() instanceof MiningToolItem) {
+            } else if (stack.getItem() instanceof MiningToolItem) {
                 Item item = stack.getItem();
                 ArrayList<Object> levelList = LevelLists.customItemList;
                 try {
                     if (!levelList.isEmpty() && levelList.contains(Registry.ITEM.getId(item).toString())) {
-                        if (!PlayerStatsManager.playerLevelisHighEnough((PlayerEntity) entity, levelList, Registry.ITEM.getId(item).toString(), true))
+                        if (!PlayerStatsManager.playerLevelisHighEnough((PlayerEntity) entity, levelList, Registry.ITEM.getId(item).toString(), true)) {
+                            ((PlayerEntity) entity).sendMessage(Text.literal("You need a higher skill level to do this!").formatted(Formatting.RED), false);
                             info.cancel();
+                        }
                     }
                 } catch (AbstractMethodError ignore) {
                 }
@@ -75,9 +80,12 @@ public class BlockMixin {
                 else if (item instanceof PickaxeItem || item instanceof ShovelItem)
                     levelList = LevelLists.toolList;
                 if (levelList != null
-                        && !PlayerStatsManager.playerLevelisHighEnough((PlayerEntity) entity, levelList, ((MiningToolItem) stack.getItem()).getMaterial().toString().toLowerCase(), true))
+                        && !PlayerStatsManager.playerLevelisHighEnough((PlayerEntity) entity, levelList, ((MiningToolItem) stack.getItem()).getMaterial().toString().toLowerCase(), true)) {
+                    ((PlayerEntity) entity).sendMessage(Text.literal("You need a higher skill level to do this!").formatted(Formatting.RED), false);
                     info.cancel();
+                }
             } else if (stack.getItem() instanceof ShearsItem && !PlayerStatsManager.playerLevelisHighEnough((PlayerEntity) entity, LevelLists.shearsList, null, true)) {
+                ((PlayerEntity) entity).sendMessage(Text.literal("You need a higher skill level to do this!").formatted(Formatting.RED), false);
                 info.cancel();
             }
 

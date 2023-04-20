@@ -2,6 +2,8 @@ package net.levelz.mixin.misc;
 
 import java.util.ArrayList;
 
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -51,6 +53,7 @@ public class ScreenHandlerMixin {
         if (type == ScreenHandlerType.BREWING_STAND && slotIndex == 3 && !cursorStack.isEmpty()) {
             // Slot 3: top; slot 0-2: bottom slots
             if (PlayerStatsManager.listContainsItemOrBlock(player, Registry.ITEM.getRawId(cursorStack.getItem()), 2) && !player.isCreative()) {
+                player.sendMessage(Text.literal("You need a higher skill level to do this!").formatted(Formatting.RED), false);
                 info.cancel();
             }
         }
@@ -60,6 +63,7 @@ public class ScreenHandlerMixin {
     private void internalOnSlotClickSwitchMixin(int slotIndex, int button, SlotActionType actionType, PlayerEntity player, CallbackInfo info) {
         if (type == ScreenHandlerType.BREWING_STAND && slotIndex == 3 && !cursorStack.isEmpty()) {
             if (PlayerStatsManager.listContainsItemOrBlock(player, Registry.ITEM.getRawId(cursorStack.getItem()), 2) && !player.isCreative()) {
+                player.sendMessage(Text.literal("You need a higher skill level to do this!").formatted(Formatting.RED), false);
                 info.cancel();
             }
         }
@@ -71,6 +75,7 @@ public class ScreenHandlerMixin {
         ItemStack itemStack = playerInventory.getStack(button);
         if (type == ScreenHandlerType.BREWING_STAND && slotIndex == 3 && !itemStack.isEmpty()) {
             if (PlayerStatsManager.listContainsItemOrBlock(player, Registry.ITEM.getRawId(itemStack.getItem()), 2) && !player.isCreative()) {
+                player.sendMessage(Text.literal("You need a higher skill level to do this!").formatted(Formatting.RED), false);
                 info.cancel();
             }
         }
@@ -82,6 +87,7 @@ public class ScreenHandlerMixin {
         ItemStack itemStack = playerInventory.getStack(button);
         if (type == ScreenHandlerType.BREWING_STAND && slotIndex == 3 && !itemStack.isEmpty()) {
             if (PlayerStatsManager.listContainsItemOrBlock(player, Registry.ITEM.getRawId(itemStack.getItem()), 2) && !player.isCreative()) {
+                player.sendMessage(Text.literal("You need a higher skill level to do this!").formatted(Formatting.RED), false);
                 info.cancel();
             }
         }
@@ -91,7 +97,9 @@ public class ScreenHandlerMixin {
     private void internalOnSlotClickQuickMixin(int slotIndex, int button, SlotActionType actionType, PlayerEntity player, CallbackInfo info) {
         ItemStack itemStack = this.slots.get(slotIndex).getStack();
         if (!LevelLists.customItemList.isEmpty() && LevelLists.customItemList.contains(Registry.ITEM.getId(itemStack.getItem()).toString())
-                && !PlayerStatsManager.playerLevelisHighEnough(player, LevelLists.customItemList, Registry.ITEM.getId(itemStack.getItem()).toString(), true))
+                && !PlayerStatsManager.playerLevelisHighEnough(player, LevelLists.customItemList, Registry.ITEM.getId(itemStack.getItem()).toString(), true)) {
+            player.sendMessage(Text.literal("You need a higher skill level to do this!").formatted(Formatting.RED), false);
             info.cancel();
+        }
     }
 }

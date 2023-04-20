@@ -2,6 +2,8 @@ package net.levelz.mixin.misc;
 
 import java.util.ArrayList;
 
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -47,8 +49,10 @@ public class EnchantmentHelperMixin {
                 PlayerEntity playerEntity = (PlayerEntity) user;
                 ArrayList<Object> levelList = LevelLists.customItemList;
                 if (!levelList.isEmpty() && levelList.contains(Registry.ITEM.getId(item).toString())) {
-                    if (!PlayerStatsManager.playerLevelisHighEnough(playerEntity, levelList, Registry.ITEM.getId(item).toString(), true))
+                    if (!PlayerStatsManager.playerLevelisHighEnough(playerEntity, levelList, Registry.ITEM.getId(item).toString(), true)) {
+                        playerEntity.sendMessage(Text.literal("You need a higher skill level to do this!").formatted(Formatting.RED), false);
                         info.cancel();
+                    }
                 } else {
                     levelList = null;
                     if (item instanceof SwordItem) {
@@ -60,8 +64,10 @@ public class EnchantmentHelperMixin {
                     else if (item instanceof PickaxeItem || item instanceof ShovelItem)
                         levelList = LevelLists.toolList;
                     if (levelList != null)
-                        if (!PlayerStatsManager.playerLevelisHighEnough(playerEntity, levelList, ((ToolItem) item).getMaterial().toString().toLowerCase(), true))
+                        if (!PlayerStatsManager.playerLevelisHighEnough(playerEntity, levelList, ((ToolItem) item).getMaterial().toString().toLowerCase(), true)) {
+                            playerEntity.sendMessage(Text.literal("You need a higher skill level to do this!").formatted(Formatting.RED), false);
                             info.cancel();
+                        }
                 }
             }
         }
@@ -75,8 +81,10 @@ public class EnchantmentHelperMixin {
                 PlayerEntity playerEntity = (PlayerEntity) user;
                 ArrayList<Object> levelList = LevelLists.customItemList;
                 if (!levelList.isEmpty() && levelList.contains(Registry.ITEM.getId(item).toString())) {
-                    if (!PlayerStatsManager.playerLevelisHighEnough(playerEntity, levelList, Registry.ITEM.getId(item).toString(), true))
+                    if (!PlayerStatsManager.playerLevelisHighEnough(playerEntity, levelList, Registry.ITEM.getId(item).toString(), true)) {
+                        playerEntity.sendMessage(Text.literal("You need a higher skill level to do this!").formatted(Formatting.RED), false);
                         info.cancel();
+                    }
                 } else {
                     levelList = null;
                     if (item instanceof SwordItem) {
@@ -88,8 +96,10 @@ public class EnchantmentHelperMixin {
                     else if (item instanceof PickaxeItem || item instanceof ShovelItem)
                         levelList = LevelLists.toolList;
                     if (levelList != null)
-                        if (!PlayerStatsManager.playerLevelisHighEnough(playerEntity, levelList, ((ToolItem) item).getMaterial().toString().toLowerCase(), true))
+                        if (!PlayerStatsManager.playerLevelisHighEnough(playerEntity, levelList, ((ToolItem) item).getMaterial().toString().toLowerCase(), true)) {
+                            playerEntity.sendMessage(Text.literal("You need a higher skill level to do this!").formatted(Formatting.RED), false);
                             info.cancel();
+                        }
                 }
             }
         }

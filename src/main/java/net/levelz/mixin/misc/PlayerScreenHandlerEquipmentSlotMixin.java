@@ -6,6 +6,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ElytraItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.registry.Registry;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -36,6 +38,7 @@ public class PlayerScreenHandlerEquipmentSlotMixin {
         }
 
         if (!result) {
+            this.field_39410.sendMessage(Text.literal("You need a higher skill level to do this!").formatted(Formatting.RED), false);
             cir.setReturnValue(false);
         }
     }
