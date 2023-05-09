@@ -98,7 +98,10 @@ public class BlockMixin {
         if (entity != null && state.getBlock() instanceof OreBlock && entity instanceof PlayerEntity playerEntity) {
             if ((float) ((PlayerStatsManagerAccess) playerEntity).getPlayerStatsManager().getSkillLevel(Skill.MINING) * ConfigInit.CONFIG.miningOreChance > world.random.nextFloat()
                     && EnchantmentHelper.getLevel(Enchantments.SILK_TOUCH, stack) == 0) {
-                Block.dropStack(world, pos, state.getDroppedStacks(builder).get(0).split(1));
+                var list = state.getDroppedStacks(builder);
+                if (!list.isEmpty()) {
+                    Block.dropStack(world, pos, list.get(0).split(1));
+                }
             }
         }
     }
